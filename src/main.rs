@@ -2,14 +2,16 @@ mod parser;
 pub mod types;
 mod utils;
 
+use parser::parse_instruction;
+use types::*;
+use utils::print_state;
+
 use clap::Parser;
 use std::fs::read_to_string;
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 use std::path::Path;
-
-use crate::utils::print_state;
 
 const NUM_MEMORY: usize = u16::MAX as usize + 1;
 const NUM_REGISTER: usize = 8;
@@ -26,6 +28,7 @@ pub struct State {
   mem: [i32; NUM_MEMORY],
   reg: [i32; NUM_REGISTER],
   num_memory: u32,
+  halted: bool,
 }
 
 fn main() {
@@ -42,6 +45,7 @@ fn main() {
     mem: [0; NUM_MEMORY],
     reg: [0; NUM_REGISTER],
     num_memory: 0,
+    halted: false,
   };
 
   // Read instructions from file into memory
@@ -52,6 +56,11 @@ fn main() {
   }
 
   //TODO: Execution loop + parsing instruction in parser.rs
+  while !state.halted {
+    let current_instruction = state.mem[state.pc as usize];
+    let current_instruction = parse_instruction(current_instruction);
+    state.pc += 1;
+  }
 
   print_state(&state);
 }

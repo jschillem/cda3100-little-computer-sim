@@ -1,3 +1,5 @@
+// Justin Schilleman (jas21ba) | CDA3100 | Assignment 1
+
 pub enum OpType {
   R(RType),
   I(IType),
@@ -5,21 +7,21 @@ pub enum OpType {
 }
 
 pub struct RType {
-  code: RTypeOpcode,
-  register_a: u8,
-  register_b: u8,
-  destination: u8,
+  pub code: RTypeOpcode,
+  pub register_a: u8,
+  pub register_b: u8,
+  pub destination: u8,
 }
 
 pub struct IType {
-  code: ITypeOpcode,
-  register_a: u8,
-  register_b: u8,
-  offset: i16,
+  pub code: ITypeOpcode,
+  pub register_a: u8,
+  pub register_b: u8,
+  pub offset: i16,
 }
 
 pub struct OType {
-  code: OTypeOpcode,
+  pub code: OTypeOpcode,
 }
 
 pub enum RTypeOpcode {

@@ -1,3 +1,5 @@
+// Justin Schilleman (jas21ba) | CDA3100 | Assignment 1
+
 use crate::State;
 
 pub fn print_state(state: &State) {

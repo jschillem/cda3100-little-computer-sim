@@ -9,4 +9,4 @@ done   halt           end of program
 ten    .fill 10
 five   .fill 5
 thirty .fill 30
-stAddr .fill start    will contain the address of start (2)
+stddr .fill start    will contain the address of start (2)

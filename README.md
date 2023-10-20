@@ -43,4 +43,4 @@ For this project I created 3 test cases that (in my opinion) adequately test the
 
 ### Packages used
 
-The only dependecy that this project has besides any `std` library features from Rust itself was a package named [CLAP](https://docs.rs/clap/latest/clap/)(Command Line Argument Parser). I used this package to simplify the process of parsing arguments from the command line, and to automatically generate a help page within the CLI using `<EXEC> -h` or `<EXEC> --help`.
+The only dependecy that this project has besides any `std` library features from Rust itself was a package named [CLAP](https://docs.rs/clap/latest/clap/) (Command Line Argument Parser). I used this package to simplify the process of parsing arguments from the command line, and to automatically generate a help page within the CLI using `<EXEC> -h` or `<EXEC> --help`.

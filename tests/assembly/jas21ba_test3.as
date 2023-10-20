@@ -6,7 +6,7 @@ start   add  1 2 3      starting with fib(2), fib(0) and fib(1) are already show
         add  0 3 2      move the newly calculated value into reg2
         add  5 6 6      increment the iteration counter
         beq  6 7 1      if on final iteration -> store and halt
-	      beq  0 0 start	go back to the beginning of the loop
+        beq  0 0 start  go back to the beginning of the loop
         sw   0 2 final  store the final number in memory     
 done    halt            end of program
 one    .fill 1

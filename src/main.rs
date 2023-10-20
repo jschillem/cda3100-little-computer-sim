@@ -29,7 +29,6 @@ pub struct State {
   mem: [i32; NUM_MEMORY],
   reg: [i32; NUM_REGISTER],
   num_memory: u32,
-  halted: bool,
 }
 
 fn main() {
@@ -46,7 +45,6 @@ fn main() {
     mem: [0; NUM_MEMORY],
     reg: [0; NUM_REGISTER],
     num_memory: 0,
-    halted: false,
   };
 
   // Read instructions from file into memory
@@ -56,8 +54,10 @@ fn main() {
     state.num_memory += 1;
   }
 
-  //TODO: Execution loop + parsing instruction in parser.rs
-  while !state.halted && state.pc as usize <= NUM_MEMORY {
+  let mut halted = false;
+  let mut count = 0;
+
+  while !halted && state.pc as usize <= NUM_MEMORY {
     print_state(&state);
 
     let current_instruction = state.mem[state.pc as usize];
@@ -66,7 +66,7 @@ fn main() {
     let current_instruction = parse_instruction(current_instruction);
     match current_instruction {
       OpType::O(o_type) => match o_type.code {
-        OTypeOpcode::Halt => state.halted = true,
+        OTypeOpcode::Halt => halted = true,
         OTypeOpcode::NoOp => continue,
         // unused so treating as NoOp
         OTypeOpcode::X => continue,
@@ -102,7 +102,12 @@ fn main() {
         }
       },
     }
+
+    count += 1;
   }
 
+  println!("\nmachine halted");
+  println!("total of {} instructions executed", count);
+  println!("final state of the machine:");
   print_state(&state);
 }

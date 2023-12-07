@@ -1,42 +1,42 @@
-// Justin Schilleman (jas21ba) | CDA3100 | Assignment 1
+// Justin Schilleman (jas21ba) | CDA3100 | Assignment 2
 
 pub enum OpType {
-  R(RType),
-  I(IType),
-  O(OType),
+    R(RType),
+    I(IType),
+    O(OType),
 }
 
 pub struct RType {
-  pub code: RTypeOpcode,
-  pub register_a: u8,
-  pub register_b: u8,
-  pub destination: u8,
+    pub code: RTypeOpcode,
+    pub register_a: u8,
+    pub register_b: u8,
+    pub destination: u8,
 }
 
 pub struct IType {
-  pub code: ITypeOpcode,
-  pub register_a: u8,
-  pub register_b: u8,
-  pub offset: i16,
+    pub code: ITypeOpcode,
+    pub register_a: u8,
+    pub register_b: u8,
+    pub offset: i16,
 }
 
 pub struct OType {
-  pub code: OTypeOpcode,
+    pub code: OTypeOpcode,
 }
 
 pub enum RTypeOpcode {
-  Add,
-  Nand,
+    Add,
+    Nand,
 }
 
 pub enum ITypeOpcode {
-  LoadWord,
-  StoreWord,
-  BranchEq,
+    LoadWord,
+    StoreWord,
+    BranchEq,
 }
 
 pub enum OTypeOpcode {
-  X,
-  Halt,
-  NoOp,
+    X,
+    Halt,
+    NoOp,
 }

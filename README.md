@@ -38,7 +38,7 @@ For this project I created 3 test cases that (in my opinion) adequately test the
 1. `jas21ba_test1`: Loads the values 10, 5, and 30 from memory. It will add 5 to 10 until it reaches 30. Upon reaching 30, it will store the final answer (30) into the memory address that the initial value (10) came from, and then halt. This program also demonstrates the ability for I-type instructions to properly parse a negative 2's complement offset.
 2. `jas21ba_test2`: This test case simply loads the numbers 5 and -1 into registers from memory, and performs the `add` and `nand` operations on the 2 numbers.
 3. `jas21ba_test3`: This test case calcuates the 15th digit of the fibbonaci sequence. Once calculated, the number will be stored into memory. The digit of the fibbonaci sequence being calculated can be altered by changing the `n` label's value in memory to whatever digit you wish (WARNING: potential for the program to panic if the integer overflows).
-
+4. `jas21ba_test4`: This test simply showcases the abilities of the cache. `jas21ba_test5` is the same program, however 'performance' varies differently based on cache settings.
 ---
 
 ### Packages used

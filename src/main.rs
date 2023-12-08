@@ -91,6 +91,8 @@ fn main() -> Result<(), i32> {
       OpType::O(o_type) => match o_type.code {
         OTypeOpcode::Halt => {
           halted = true;
+          // Not sure if writebacks are necessary for dirty blocks on halt,
+          // if not just comment out the line below.
           cache.writeback_dirty_blocks(&mut state.mem);
         }
         OTypeOpcode::NoOp => continue,

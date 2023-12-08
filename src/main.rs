@@ -89,7 +89,10 @@ fn main() -> Result<(), i32> {
     let current_instruction = parse_instruction(current_instruction);
     match current_instruction {
       OpType::O(o_type) => match o_type.code {
-        OTypeOpcode::Halt => halted = true,
+        OTypeOpcode::Halt => {
+          halted = true;
+          cache.writeback_dirty_blocks(&mut state.mem);
+        }
         OTypeOpcode::NoOp => continue,
         // unused so treating as NoOp
         OTypeOpcode::X => continue,

@@ -1,0 +1,16 @@
+      lw   0 1 one   load registers 1-6 with values 1-6 (spatial locality)
+      lw   0 2 two   same program as test 4, however with different parameters
+      lw   0 3 three these parameters showcase how more blocks per set decreases
+      lw   0 4 four  cache misses significantly by keeping more blocks in cache
+      lw   0 5 five
+      lw   0 6 six
+      add  1 2 1
+      sw   0 1 six   shows that the cache will writeback all dirty data on a halt
+      sw   0 2 two
+done  halt
+one   .fill 1
+two   .fill 2
+three .fill 3
+four  .fill 4
+five  .fill 5
+six   .fill 6

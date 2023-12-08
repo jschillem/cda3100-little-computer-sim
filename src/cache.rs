@@ -88,10 +88,22 @@ impl Set {
 
 impl Cache {
   pub fn new(block_size_in_words: usize, number_of_sets: usize, blocks_per_set: usize) -> Cache {
+    let offset_bit_count = if block_size_in_words == 1 {
+      0
+    } else {
+      utils::min_bits_required(block_size_in_words)
+    };
+
+    let set_bit_count = if number_of_sets == 1 {
+      0
+    } else {
+      utils::min_bits_required(number_of_sets)
+    };
+
     Cache {
       sets: vec![Set::new(block_size_in_words, blocks_per_set); number_of_sets],
-      offset_bit_count: utils::min_bits_required(block_size_in_words),
-      set_bit_count: utils::min_bits_required(number_of_sets),
+      offset_bit_count,
+      set_bit_count,
       block_size: block_size_in_words,
       set_count: number_of_sets,
     }
@@ -268,6 +280,32 @@ impl Cache {
     self.set_value(address, memory, value);
   }
 
+  /// For use with HALT instructions, writes back all dirty cache blocks before halting
+  pub fn writeback_dirty_blocks(&self, memory: &mut [i32]) {
+    for set in self.sets.iter() {
+      for block in set.0.iter() {
+        if !block.dirty {
+          continue;
+        }
+
+        let block_end_bound = block.starting_address + self.block_size;
+        let memory_block = &mut memory[block.starting_address..block_end_bound];
+        assert!(
+          memory_block.len() == block.data.len(),
+          "Cache block length does not match memory block length\ncache: {}\nmemory: {}",
+          block.data.len(),
+          memory_block.len(),
+        );
+        memory_block.copy_from_slice(&block.data);
+        utils::print_action(
+          block.starting_address,
+          self.block_size,
+          Action::CacheToMemory,
+        );
+      }
+    }
+  }
+
   fn get_block_offset(&self, address: usize) -> usize {
     // If block size is 1 overwrite to zero to ensure no
     // incorrect indexing into the block
@@ -309,6 +347,7 @@ impl Cache {
   }
 
   /// debug print function of the whole cache
+  #[allow(dead_code)]
   fn print_cache(&self) {
     println!("--- --- --- Cache --- --- ---");
     println!("block_size:       {}", self.block_size);

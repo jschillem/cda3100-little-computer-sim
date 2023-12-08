@@ -1,5 +1,6 @@
 // Justin Schilleman (jas21ba) | CDA3100 | Assignment 2
 
+use crate::cache::Action;
 use crate::State;
 
 pub fn print_state(state: &State) {
@@ -15,6 +16,21 @@ pub fn print_state(state: &State) {
     println!("\t\treg[ {} ] {}", register.0, register.1);
   }
   println!("end state");
+}
+
+pub fn print_action(address: usize, size: usize, action: Action) {
+  print!(
+    "@@@ transferring word [{}-{}] ",
+    address,
+    address + size - 1
+  );
+  match action {
+    Action::CacheToProcessor => println!("from the cache to the processor"),
+    Action::ProcessorToCache => println!("from the processor to the cache"),
+    Action::MemoryToCache => println!("from the memory to the cache"),
+    Action::CacheToMemory => println!("from the cache to the memory"),
+    Action::CacheToNowhere => println!("from the cache to nowhere"),
+  }
 }
 
 pub fn is_power_of_two(n: usize) -> bool {

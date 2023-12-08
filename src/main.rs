@@ -1,9 +1,9 @@
 // Justin Schilleman (jas21ba) | CDA3100 | Assignment 2
 
-mod cache;
+pub mod cache;
 mod parser;
 pub mod types;
-mod utils;
+pub mod utils;
 
 use parser::parse_instruction;
 use types::*;
@@ -70,13 +70,6 @@ fn main() -> Result<(), i32> {
     args.blocks_per_set,
   );
 
-  cache.get_value(0, &state.mem);
-  cache.get_value(3, &state.mem);
-  cache.get_value(10, &state.mem);
-  cache.get_value(6, &state.mem);
-
-  return Ok(());
-
   // Read instructions from file into memory
   for line in io::BufReader::new(file).lines().enumerate() {
     let instruction: i32 = line.1.unwrap().trim().parse().expect("NaN");
@@ -88,9 +81,9 @@ fn main() -> Result<(), i32> {
   let mut count = 0;
 
   while !halted && state.pc as usize <= NUM_MEMORY {
-    print_state(&state);
+    // print_state(&state);
 
-    let current_instruction = state.mem[state.pc as usize];
+    let current_instruction = cache.get_value(state.pc as usize, &mut state.mem);
     state.pc += 1;
 
     let current_instruction = parse_instruction(current_instruction);
@@ -117,11 +110,12 @@ fn main() -> Result<(), i32> {
         ITypeOpcode::LoadWord => {
           let reg_a = state.reg[i_type.register_a as usize];
           let address = (i_type.offset as i32 + reg_a) as usize;
-          state.reg[i_type.register_b as usize] = state.mem[address];
+          state.reg[i_type.register_b as usize] = cache.get_value(address, &mut state.mem);
         }
         ITypeOpcode::StoreWord => {
           let address = state.reg[i_type.register_a as usize] + i_type.offset as i32;
-          state.mem[address as usize] = state.reg[i_type.register_b as usize];
+          let value = state.reg[i_type.register_b as usize];
+          cache.set_value(address as usize, &mut state.mem, value);
         }
         ITypeOpcode::BranchEq => {
           let reg_a = state.reg[i_type.register_a as usize];
@@ -138,7 +132,7 @@ fn main() -> Result<(), i32> {
 
   println!("\nmachine halted");
   println!("total of {} instructions executed", count);
-  println!("final state of the machine:");
-  print_state(&state);
+  // println!("final state of the machine:");
+  // print_state(&state);
   Ok(())
 }

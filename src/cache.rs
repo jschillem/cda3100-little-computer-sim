@@ -111,12 +111,17 @@ impl Cache {
     // println!("block_offset: {} -- {:b}", block_offset, block_offset);
 
     let set = self.sets.get_mut(set_index).expect("Incorrect set index");
-    for block in set.0.iter() {
+    for (i, block) in set.0.iter_mut().enumerate() {
       if block.tag == tag && block.valid {
         let data = *block
           .data
           .get(block_offset)
           .expect("Incorrect block offset");
+
+        // Edit instructions_since_use for all blocks for calculating LRU
+        block.instructions_since_use = 0;
+        set.use_block(i);
+
         utils::print_action(address, 1, Action::CacheToProcessor);
         return data;
       }
@@ -190,7 +195,7 @@ impl Cache {
     // println!("block_offset: {} -- {:b}", block_offset, block_offset);
 
     let set = self.sets.get_mut(set_index).expect("Incorrect set index");
-    for block in set.0.iter_mut() {
+    for (i, block) in set.0.iter_mut().enumerate() {
       if block.tag == tag && block.valid {
         let row = block
           .data
@@ -198,6 +203,11 @@ impl Cache {
           .expect("Incorrect block offset");
         *row = value;
         block.dirty = true;
+
+        // Edit instructions_since_use for all blocks for calculating LRU
+        block.instructions_since_use = 0;
+        set.use_block(i);
+
         utils::print_action(address, 1, Action::ProcessorToCache);
         return;
       }
